@@ -182,6 +182,11 @@ Lib_RandomBuffer_System_bindings
 
 (rule
  (deps
+  %{lib:ctypes:cstubs.cmxa}
+  (package ctypes)
+  (package bigarray-compat)
+  (package stdlib-shims)
+  (package integers)
   (source_tree raw)
   (source_tree kremlin))
  (targets
@@ -368,7 +373,13 @@ Lib_RandomBuffer_System_bindings.ml
   (no-infer
    (progn
     (chdir raw (run ./configure))
-    (chdir raw (run make -j 8))
+    (chdir raw (run env
+      CTYPES_CMXA=%{lib:ctypes:ctypes.cmxa}
+      BIGARRAY_CMXA=%{lib:bigarray-compat:bigarray_compat.cmxa}
+      STDLIB_SHIMS_CMXA=%{lib:stdlib-shims:stdlib_shims.cmxa}
+      INTEGERS_CMXA=%{lib:integers:integers.cmxa}
+      CSTUBS_CMXA=%{lib:ctypes:cstubs.cmxa}
+      make -j 8))
     (chdir raw (run make libevercrypt_c_stubs.a dllevercrypt_c_stubs.so))
     (copy raw/lib/Hacl_Spec_stubs.ml Hacl_Spec_stubs.ml)
 (copy raw/lib/Hacl_Spec_bindings.ml Hacl_Spec_bindings.ml)

@@ -14,7 +14,7 @@ license: "Apache-2.0"
 homepage: "http://github.com/dune-universe/hacl-star-dune"
 bug-reports: "https://github.com/project-everest/hacl-star/issues"
 depends: [
-  "dune" { >= "2.6" }
+  "dune" { >= "2.9" }
   "ocaml" { >= "4.08.0" }
   "ocamlfind" {build}
   "ctypes" { >= "0.18.0" }

@@ -1,3 +1,3 @@
-(lang dune 2.6)
+(lang dune 2.9)
 (name hacl-star)
 (formatting disabled)

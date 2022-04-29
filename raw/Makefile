@@ -114,12 +114,21 @@ ifneq (,$(wildcard lib_gen))
 
 .PRECIOUS: %.cmx
 
-OCAMLOPT=ocamlfind opt -package ctypes,ctypes.stubs -linkpkg -I lib
+CTYPES_LOCATION=$(shell dirname $(CTYPES_CMXA))
+BIGARRAY_LOCATION=$(shell dirname $(BIGARRAY_CMXA))
+STDLIB_SHIMS_LOCATION=$(shell dirname $(STDLIB_SHIMS_CMXA))
+INTEGERS_LOCATION=$(shell dirname $(INTEGERS_CMXA))
+STR_CMXA=$(shell ocamlfind c -where)/str.cmxa
+
+#OCAMLOPT=ocamlfind opt -package ctypes,ctypes.stubs -linkpkg -I lib
+OCAMLOPT=ocamlopt.opt -I lib -I $(BIGARRAY_LOCATION) -I $(STDLIB_SHIMS_LOCATION) -I $(INTEGERS_LOCATION) -I $(CTYPES_LOCATION) $(BIGARRAY_CMXA) $(STDLIB_SHIMS_CMXA) $(INTEGERS_CMXA) $(CTYPES_CMXA) $(STR_CMXA) $(CSTUBS_CMXA)
+
 OCAMLDEP=ocamlfind dep -I lib -slash
 
-OCAMLC=ocamlfind c -g -package ctypes,ctypes.stubs -linkpkg -I lib
+OCAMLC=ocamlfind c -g -package ctypes,ctypes.stubs -linkpkg -I lib -only-show
 
-CFLAGS += -I "$(shell ocamlfind query ctypes)" -I "$(shell ocamlfind c -where)"
+# CFLAGS += -I "$(shell ocamlfind query ctypes)" -I "$(shell ocamlfind c -where)"
+CFLAGS += -I "$(CTYPES_LOCATION)" -I "$(shell ocamlfind c -where)"
 
 # Don't include bindings for files that cannot be compiled.
 BLACKLIST_ML=$(patsubst %.c,%,$(BLACKLIST))
